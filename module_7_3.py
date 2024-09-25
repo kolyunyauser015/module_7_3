@@ -1,18 +1,18 @@
-import string
-
-
 class WordsFinder:
     def __init__(self, *file_names):
         self.file_names = file_names
 
     def get_all_words(self):
         all_words = {}
-        table = str.maketrans("", "", string.punctuation)
+        punctuation_list = [',', '.', '=', '!', '?', ';', ':', ' - ']
         for name in self.file_names:
             with open(name, encoding='utf-8') as file:
                 words_text = []
                 for line in file:
-                    words_text += line.lower().translate(table).split()
+                    lines = line.lower()
+                    for punct in punctuation_list:
+                        lines = lines.replace(punct, ' ')
+                    words_text += lines.split()
                 all_words[name] = words_text
         return all_words
 
@@ -31,3 +31,4 @@ class WordsFinder:
                     if list_words[j] == word.lower():
                         count_words += 1
                 return {i[0]: count_words}
+                
